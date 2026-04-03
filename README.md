@@ -61,7 +61,7 @@ Run `/threat-intel` at the start of your work day. It will:
 1. **Profile your repo** — languages, dependencies, MCP servers, agent tools
 2. **Scan threat feeds** — CVE databases, supply chain attack reports, AI security research
 3. **Score relevance** — each threat scored on applicability, severity, and proximity to your specific project
-4. **Write a daily brief** — saved to `knowledge/roles/ciso/articles/generated/daily-YYYY-MM-DD.md`
+4. **Write a brief** — saved to `knowledge/roles/ciso/articles/generated/<mode>-YYYY-MM-DD.md`
 5. **Propose actions** — classified as AUTO (agent can execute) or MANUAL (you need to act), with your approval before anything runs
 
 ### Security review

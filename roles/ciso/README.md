@@ -14,7 +14,7 @@ Security reviewer and daily threat intelligence for Claude Code projects.
 ## Daily workflow
 
 1. Run `/threat-intel` at the start of your day
-2. Review the brief in `knowledge/roles/ciso/articles/generated/daily-YYYY-MM-DD.md`
+2. Review the brief in `knowledge/roles/ciso/articles/generated/` (incremental or broad)
 3. Approve or defer the recommended actions
 4. The CISO agent references recent briefs when reviewing code changes
 

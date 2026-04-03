@@ -49,10 +49,11 @@ For each finding, report:
 Read `knowledge/roles/ciso/` for domain-specific security articles and notes
 relevant to this project. Apply any directives found in the notes.
 
-Daily briefs from `/threat-intel` are saved to
-`knowledge/roles/ciso/articles/generated/daily-YYYY-MM-DD.md`. Reference
-recent briefs when reviewing code — they contain repo-specific threat context
-and recommended actions that may inform your review priorities.
+Briefs from `/threat-intel` are saved to
+`knowledge/roles/ciso/articles/generated/<mode>-YYYY-MM-DD.md` (where mode
+is `incremental` or `broad`). Reference recent briefs when reviewing code —
+they contain repo-specific threat context and recommended actions that may
+inform your review priorities.
 
 ## Rationalizations to Reject
 
