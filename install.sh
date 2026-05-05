@@ -108,47 +108,42 @@ for role in "${roles[@]}"; do
         done
     fi
 
-    # 4. Knowledge directory structure
-    if [ -d "$role_dir/knowledge" ]; then
-        for item in "$role_dir/knowledge"/*; do
-            [ -e "$item" ] || continue
-            bname="$(basename "$item")"
-
-            if [ -d "$item" ]; then
-                # Create subdirectory with .gitkeep
-                mkdir -p "$target/knowledge/roles/$role/$bname"
-                if [ ! -f "$target/knowledge/roles/$role/$bname/.gitkeep" ]; then
-                    touch "$target/knowledge/roles/$role/$bname/.gitkeep"
-                    echo "    + knowledge/roles/$role/$bname/"
-                    changed=$((changed + 1))
-                fi
-            elif [ "$bname" = "priority-sources.md" ]; then
-                # Append priority sources if they don't already exist in the
-                # project's priority-sources.md
-                ps_target="$target/knowledge/docs/priority-sources.md"
-                if [ ! -f "$ps_target" ]; then
-                    mkdir -p "$(dirname "$ps_target")"
-                    echo "" >> "$ps_target"
-                fi
-                echo "    ~ Appending CISO priority sources to priority-sources.md"
-                echo "" >> "$ps_target"
-                echo "# -- $role priority sources (added by soloforge-crew) --" >> "$ps_target"
-                cat "$item" >> "$ps_target"
-                changed=$((changed + 1))
-            else
-                install_if_new "$item" \
-                    "$target/knowledge/roles/$role/$bname" \
-                    "knowledge/roles/$role/$bname"
-            fi
+    # 4. Agent state files
+    if [ -d "$role_dir/state" ]; then
+        for state_file in "$role_dir/state"/*; do
+            [ -f "$state_file" ] || continue
+            fname="$(basename "$state_file")"
+            install_if_new "$state_file" \
+                "$target/.claude/agents/$role/state/$fname" \
+                ".claude/agents/$role/state/$fname"
         done
     fi
 
-    # Ensure standard knowledge subdirectories exist
-    for subdir in articles/external articles/generated articles/authored notes patterns; do
-        dir="$target/knowledge/roles/$role/$subdir"
-        mkdir -p "$dir"
-        [ -f "$dir/.gitkeep" ] || touch "$dir/.gitkeep"
-    done
+    # 5. Agent sub-skills
+    if [ -d "$role_dir/sub-skills" ]; then
+        for skill_file in "$role_dir/sub-skills"/*; do
+            [ -f "$skill_file" ] || continue
+            fname="$(basename "$skill_file")"
+            install_if_new "$skill_file" \
+                "$target/.claude/agents/$role/sub-skills/$fname" \
+                ".claude/agents/$role/sub-skills/$fname"
+        done
+    fi
+
+    # 6. Priority sources (append to project docs)
+    priority_src="$role_dir/priority-sources.md"
+    if [ -f "$priority_src" ]; then
+        ps_target="$target/knowledge/docs/priority-sources.md"
+        if [ ! -f "$ps_target" ]; then
+            mkdir -p "$(dirname "$ps_target")"
+            touch "$ps_target"
+        fi
+        echo "    ~ Appending $role priority sources to priority-sources.md"
+        echo "" >> "$ps_target"
+        echo "# -- $role priority sources (added by soloforge-crew) --" >> "$ps_target"
+        cat "$priority_src" >> "$ps_target"
+        changed=$((changed + 1))
+    fi
 
     echo ""
 done
