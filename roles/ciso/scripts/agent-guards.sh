@@ -24,11 +24,15 @@ env() {
 }
 
 # 2. printenv: block well-known sensitive names; pass through everything else
+#
+# Project-specific extensions: copy this script to ~/.agent_guards.sh and add
+# project-specific token patterns (e.g., "FOO_API_*|BAR_TOKEN") to the case
+# branch below. The suffix patterns at the end (*_TOKEN, *_API_KEY, etc.)
+# already cover most naming conventions generically.
 printenv() {
   local v="$1"
   case "$v" in
     ANTHROPIC_API_KEY|OPENAI_API_KEY|GOOGLE_API_KEY|GH_TOKEN|GITHUB_TOKEN|\
-    CLOB_*|POLYMARKET_*|KALSHI_*|\
     AWS_*|GCP_*|AZURE_*|\
     *_SECRET|*_PRIVATE_KEY|*_PASSWORD|*_PASSPHRASE|*_TOKEN|*_API_KEY)
       echo "(agent-guards: $v is sensitive. Ask the user to provide the value if needed.)"
