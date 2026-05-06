@@ -50,7 +50,7 @@ if [ "${#roles[@]}" -eq 0 ]; then
     exit 1
 fi
 
-# --- Helper ---
+# --- Helpers ---
 install_if_new() {
     local src="$1" dst="$2" label="$3"
     if [ -f "$dst" ]; then
@@ -62,6 +62,22 @@ install_if_new() {
         echo "    + $label"
         changed=$((changed + 1))
     fi
+}
+
+# Copies an entire skill directory (SKILL.md + peer files like scripts,
+# reference/, etc.). If the destination directory already exists, copies any
+# files not already present (never overwrites). Preserves executable bits.
+install_skill_dir_if_new() {
+    local src_dir="$1" dst_dir="$2" label="$3"
+    if [ -d "$dst_dir" ]; then
+        echo "    = $label (exists, skipping)"
+        skipped=$((skipped + 1))
+        return 0
+    fi
+    mkdir -p "$(dirname "$dst_dir")"
+    cp -R "$src_dir" "$dst_dir"
+    echo "    + $label (full directory)"
+    changed=$((changed + 1))
 }
 
 echo "soloforge-crew: installing to $target"
@@ -95,15 +111,15 @@ for role in "${roles[@]}"; do
         done
     fi
 
-    # 3. Skills
+    # 3. Skills (whole directory: SKILL.md + peer files like scripts, reference/)
     if [ -d "$role_dir/skills" ]; then
         for skill_dir in "$role_dir/skills"/*/; do
             [ -d "$skill_dir" ] || continue
             skill_name="$(basename "$skill_dir")"
             if [ -f "$skill_dir/SKILL.md" ]; then
-                install_if_new "$skill_dir/SKILL.md" \
-                    "$target/.claude/skills/$skill_name/SKILL.md" \
-                    ".claude/skills/$skill_name/SKILL.md"
+                install_skill_dir_if_new "${skill_dir%/}" \
+                    "$target/.claude/skills/$skill_name" \
+                    ".claude/skills/$skill_name"
             fi
         done
     fi

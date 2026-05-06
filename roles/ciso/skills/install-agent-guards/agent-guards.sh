@@ -11,7 +11,7 @@
 # the floor against accidental exposure, not to enforce a hard boundary.
 #
 # Source: derived from Dean Langsam's pattern.
-# Threat model: ./reference/threat-model.md (in the install-agent-guards skill)
+# Threat model: ./reference/threat-model.md (sibling to this script)
 
 [[ -n "$CLAUDECODE" ]] || return 0
 

@@ -27,11 +27,11 @@ This is a *floor*, not a ceiling. Real defense remains: `.env` outside git, fine
 
 ## Workflow
 
-1. Read `../scripts/agent-guards.sh` (the source-of-truth).
+1. Read `./agent-guards.sh` (the source-of-truth, alongside this SKILL.md).
 2. If `~/.agent_guards.sh` already exists, diff it against the source and show the diff.
 3. Ask the user to approve the install (or update).
 4. On approval:
-   - Copy `../scripts/agent-guards.sh` to `~/.agent_guards.sh`
+   - Copy `./agent-guards.sh` to `~/.agent_guards.sh`
    - Ensure `~/.zshenv` contains: `[[ -f "$HOME/.agent_guards.sh" ]] && source "$HOME/.agent_guards.sh"`
    - Idempotent: grep for the source line first; only append if missing.
 5. Print verification instructions:
@@ -41,7 +41,7 @@ This is a *floor*, not a ceiling. Real defense remains: `.env` outside git, fine
 
 ## What is NOT done by this skill
 
-- Does not modify the source-of-truth `../scripts/agent-guards.sh`. To change behavior, edit the script in soloforge-crew, then re-run this skill.
+- Does not modify the source-of-truth `./agent-guards.sh`. To change behavior, edit the script in soloforge-crew (or your installed copy), then re-run this skill to refresh `~/.agent_guards.sh`.
 - Does not commit anything to repos.
 - Does not export, set, or read secret values.
 
